@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>User Details</h1>
+        <form id="userDetailsForm"method="POST" enctype="multipart/form-data">
+       {% csrf_token %}
+        {% if messages %}
+  {% for message in messages %}
+    <div style="color:red; font-weight:bold;">
+      {{ message }}
+    </div>
+  {% endfor %}
+{% endif %}
+
+            <div class="form-group">
+                <label for="fullName">Full Name <span class="required">*</span></label>
+                <input type="text" id="fullName" name="fullName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="gender">Gender <span class="required">*</span></label>
+                <select id="gender" name="gender" required>
+                    <option value="">Select</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                    <option value="prefer-not-to-say">Prefer not to say</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="dob">Date of Birth <span class="required">*</span></label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email ID <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number <span class="required">*</span></label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Current Location/Address <span class="required">*</span></label>
+                <textarea id="address" name="address" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="education">Educational Qualification <span class="required">*</span></label>
+                <select id="education" name="education" required>
+                    <option value="">Select</option>
+                    <option value="10th">10th</option>
+                    <option value="inter">Intermediate (12th)</option>
+                    <option value="diploma">Diploma</option>
+                    <option value="ug">Undergraduate (UG)</option>
+                    <option value="pg">Postgraduate (PG)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="graduationYear">Year of Graduation <span class="required">*</span></label>
+                <input type="number" id="graduationYear" name="graduationYear" min="1900" max="2099" required>
+            </div>
+
+            <div class="form-group">
+                <label for="skills">Skills / Technologies Known <span class="required">*</span></label>
+                <div class="skills-input-container">
+                    <div id="skillsContainer" class="skills-container"></div>
+                    <input type="text" name="skills" required />
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="experience">Years of Experience <span class="required">*</span></label>
+                <input type="number" id="experience" name="experience" min="0" step="0.5" required>
+            </div>
+
+            <div class="form-group">
+                <label for="resume">Resume Upload (PDF/Doc) <span class="required">*</span></label>
+                <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
+            </div>
+
+            <div class="form-group">
+                <label for="jobRole">Preferred Job Role <span class="required">*</span></label>
+                <input type="text" id="jobRole" name="jobRole" required>
+            </div>
+
+            <div class="form-group">
+                <label for="currentCompany">Current Company (if any)</label>
+                <input type="text" id="currentCompany" name="currentCompany">
+            </div>
+
+            <div class="form-group">
+                <label for="expectedSalary">Expected Salary</label>
+                <input type="number" id="expectedSalary" name="expectedSalary" min="0">
+            </div>
+
+            <div class="form-group">
+                <label for="noticePeriod">Notice Period (if employed, in days)</label>
+                <input type="number" id="noticePeriod" name="noticePeriod" min="0">
+            </div>
+
+            <div class="form-group">
+                <label>Willing to Relocate? <span class="required">*</span></label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="relocate" value="yes" required> Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="relocate" value="no"> No
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-note">
+                <p><span class="required">*</span> Indicates required field</p>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">Submit Details</button>
+        </form>
+    </div>
+    <script src="{% static 'js/scripts.js' %}"></script>
+</body>
+</html>

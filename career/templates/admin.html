@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="{% static 'css/admin.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+  <div class="main-container">
+
+    {% if not user.is_authenticated %}
+    <!-- Login Section -->
+    <div class="login-container">
+      <div class="logo-area">
+        <img src="{% static 'assets/Lora.png' %}" alt="Company Logo" class="logo-img" />
+      </div>
+      <div class="login-form-area">
+        <h2>Admin Login</h2>
+        <form method="POST">
+          {% csrf_token %}
+          <input type="text" name="username" placeholder="Username" required />
+          <input type="password" name="password" placeholder="Password" required />
+          <button type="submit">Login</button>
+        </form>
+        {% if messages %}
+          {% for message in messages %}
+            <p style="color: red;">{{ message }}</p>
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
+    {% else %}
+    <!-- Dashboard Section -->
+    <div class="dashboard">
+      <div class="dashboard-header">
+        <div class="ref-id">Logged in as: {{ user.username }}</div>
+        <div class="user-profile">
+          <i class="fas fa-user-circle"></i> Admin
+          <a href="{% url 'admin_logout' %}" class="logout-btn">Logout</a>
+        </div>
+      </div>
+    <form method="GET" class="search-form">
+  <label for="search_date">Filter by Date:</label>
+  <input type="date" name="search_date" id="search_date" value="{{ request.GET.search_date }}">
+  <button type="submit">Search</button>
+</form>
+
+<div class="submission-count">
+  Total Submissions: {{ applicants|length }}
+</div>
+      <div class="table-section">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Referral Code</th>
+                <th>Full Name</th>
+                <th>Gender</th>
+                <th>DOB</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th>Qualification</th>
+                <th>Graduation Year</th>
+                <th>Skills</th>
+                <th>Experience</th>
+                <th>Resume</th>
+                <th>Job Role</th>
+                <th>Company</th>
+                <th>Salary</th>
+                <th>Notice</th>
+                <th>Relocate</th>
+                <th>Submitted At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for applicant in applicants %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ applicant.referral_code }}</td>
+                <td>{{ applicant.full_name }}</td>
+                <td>{{ applicant.gender }}</td>
+                <td>{{ applicant.dob }}</td>
+                <td>{{ applicant.email }}</td>
+                <td>{{ applicant.phone }}</td>
+                <td>{{ applicant.address }}</td>
+                <td>{{ applicant.education }}</td>
+                <td>{{ applicant.graduation_year }}</td>
+                <td>{{ applicant.skills }}</td>
+                <td>{{ applicant.experience }}</td>
+                <td><a href="{{ applicant.resume.url }}" target="_blank">View</a></td>
+                <td>{{ applicant.job_role }}</td>
+                <td>{{ applicant.current_company }}</td>
+                <td>{{ applicant.expected_salary }}</td>
+                <td>{{ applicant.notice_period }}</td>
+                <td>{{ applicant.relocate }}</td>
+                <td>{{ applicant.submitted_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                  <a href="{% url 'delete_applicant' applicant.id %}" title="Delete Row">
+                    <i class="fas fa-trash-alt"></i>
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr><td colspan="18">No data available</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+  <script src="{% static 'js/admin.js' %}"></script>
+</body>
+</html>
