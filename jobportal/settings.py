@@ -105,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia\Kolkata'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -138,5 +138,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'loracareerportal@gmail.com'          # Replace with your Gmail
-EMAIL_HOST_PASSWORD = 'rhbb kknp kpvy hlwh'          # ← Use App Password (no spaces)
+EMAIL_HOST_PASSWORD = 'wuufznyviiopsacl'                # ← Use App Password (no spaces)
 
