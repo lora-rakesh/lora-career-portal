@@ -31,6 +31,7 @@
         {% endif %}
       </div>
     </div>
+
     {% else %}
     <!-- Dashboard Section -->
     <div class="dashboard">
@@ -40,16 +41,20 @@
           <i class="fas fa-user-circle"></i> Admin
           <a href="{% url 'admin_logout' %}" class="logout-btn">Logout</a>
         </div>
-      </div>
-    <form method="GET" class="search-form">
-  <label for="search_date">Filter by Date:</label>
-  <input type="date" name="search_date" id="search_date" value="{{ request.GET.search_date }}">
-  <button type="submit">Search</button>
-</form>
+      </div><br>
 
-<div class="submission-count">
-  Total Submissions: {{ applicants|length }}
-</div>
+      <!-- Search Bar -->
+      <form method="GET" class="search-form">
+        <input type="text" name="search" placeholder="Search anything..." value="{{ request.GET.search }}">
+        <button type="submit">Search</button>
+      </form>
+
+      <!-- Submission Count -->
+      <div class="submission-count">
+        Total Submissions: {{ applicants|length }}
+      </div>
+
+      <!-- Table -->
       <div class="table-section">
         <div class="table-container">
           <table>
@@ -106,7 +111,9 @@
                 </td>
               </tr>
               {% empty %}
-              <tr><td colspan="18">No data available</td></tr>
+              <tr>
+                <td colspan="20">No data available</td>
+              </tr>
               {% endfor %}
             </tbody>
           </table>
@@ -114,7 +121,6 @@
       </div>
     </div>
     {% endif %}
-
   </div>
   <script src="{% static 'js/admin.js' %}"></script>
 </body>

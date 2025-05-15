@@ -1,19 +1,16 @@
-from django.shortcuts import render
-
-# Create your views here.
-import random
-import string
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from .models import Applicant
+import random
+import string
 from datetime import datetime
 
 def generate_referral_code():
-    # Keeps trying until a unique referral code is generated
     while True:
         code = 'LIT' + ''.join(random.choices(string.digits, k=5))
         if not Applicant.objects.filter(referral_code=code).exists():
@@ -24,7 +21,7 @@ def user_form_view(request):
         data = request.POST
         file = request.FILES.get('resume')
 
-        # 1. Check if email already exists
+        # Check if email already exists
         if Applicant.objects.filter(email=data['email']).exists():
             messages.error(request, "This email has already been used to apply.")
             return render(request, 'index.html')
@@ -32,7 +29,6 @@ def user_form_view(request):
         referral_code = generate_referral_code()
 
         try:
-            # 2. Save applicant data
             applicant = Applicant.objects.create(
                 full_name=data['fullName'],
                 gender=data['gender'],
@@ -53,11 +49,10 @@ def user_form_view(request):
                 referral_code=referral_code
             )
 
-            # 3. Send referral code via email
             send_mail(
                 'Your Referral Code from JobPortal',
-                f'Thank you for applying to LoRa IT Innovations!....we have received your application.If your skill set matches the position, our Recruitment team will reach out to discuss next steps in the process. Your referral code is: {referral_code} for future reference.',
-                'loracareerportal@gmail.com',  # Must match EMAIL_HOST_USER
+                f'Thank you for applying to LoRa IT Innovations! We have received your application. If your skill set matches the position, our Recruitment team will reach out to discuss next steps in the process. Your referral code is: {referral_code} for future reference.',
+                'loracareerportal@gmail.com',
                 [data['email']],
                 fail_silently=False,
             )
@@ -69,8 +64,6 @@ def user_form_view(request):
             return render(request, 'index.html')
 
     return render(request, 'index.html')
-
-
 
 def admin_login(request):
     if request.method == 'POST':
@@ -88,21 +81,33 @@ def admin_login(request):
     if request.user.is_authenticated:
         applicants = Applicant.objects.all().order_by('-submitted_at')
 
-        search_date = request.GET.get('search_date')
-        if search_date:
-            try:
-                date_obj = datetime.strptime(search_date, "%Y-%m-%d").date()
-                applicants = applicants.filter(submitted_at__date=date_obj)
-            except ValueError:
-                messages.error(request, "Invalid date format.")
+        query = request.GET.get('search')
+        if query:
+            applicants = applicants.filter(
+                Q(full_name__icontains=query) |
+                Q(gender__icontains=query) |
+                Q(email__icontains=query) |
+                Q(phone__icontains=query) |
+                Q(address__icontains=query) |
+                Q(education__icontains=query) |
+                Q(graduation_year__icontains=query) |
+                Q(skills__icontains=query) |
+                Q(experience__icontains=query) |
+                Q(job_role__icontains=query) |
+                Q(current_company__icontains=query) |
+                Q(expected_salary__icontains=query) |
+                Q(notice_period__icontains=query) |
+                Q(relocate__icontains=query) |
+                Q(referral_code__icontains=query) |
+                Q(submitted_at__icontains=query)
+            
+            )
 
     return render(request, 'admin.html', {'applicants': applicants})
-
 
 def admin_logout(request):
     logout(request)
     return redirect('admin_login')
-
 
 def delete_applicant(request, id):
     applicant = get_object_or_404(Applicant, id=id)
