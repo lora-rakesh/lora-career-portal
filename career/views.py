@@ -100,7 +100,7 @@ def admin_login(request):
                 Q(relocate__icontains=query) |
                 Q(referral_code__icontains=query) |
                 Q(submitted_at__icontains=query)
-            
+                                                                                                                                                                                                                                                                                                                
             )
 
     return render(request, 'admin.html', {'applicants': applicants})
